@@ -29,6 +29,7 @@ public class HomeController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> GetToken()
     {
         var response = await _queueService.GetToken();
@@ -46,6 +47,7 @@ public class HomeController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> ServeNext()
     {
         var result = await _queueService.ServeNext();
@@ -67,6 +69,7 @@ public class HomeController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> CompleteCurrent(int id)
     {
         var result = await _queueService.Complete(id);

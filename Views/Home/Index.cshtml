@@ -13,16 +13,16 @@
     <h1 class="display-4">Service Station</h1>
 
     <form method="post" action="/Home/GetToken">
-        <button class="btn-primary" type="submit">Get Token</button>
+        @Html.AntiForgeryToken()
+
+        <button class="btn btn-primary" type="submit">Get Token</button>
     </form>
 
     <form method="post" action="/Home/ServeNext">
-        <button class="btn-primary" type="submit">Serve Next</button>
+        @Html.AntiForgeryToken()
+        
+        <button class="btn btn-primary" type="submit">Serve Next</button>
     </form>
-
-    <!-- <form method="post" action="/Home/CompleteCurrent">
-        <button class="btn-primary" type="submit">Complete Current</button>
-    </form> -->
 
     <h2 class="display-5">Now Serving</h2>
 
@@ -32,8 +32,10 @@
             <span class="display-6">Token: @token.TokenNumber</span>
 
             <form method="post" action="/Home/CompleteCurrent" style="display: inline;">
+                @Html.AntiForgeryToken()
+
                 <input type="hidden" name="id" value="@token.Id" />
-                <button class="btn-primary" type="submit">Complete</button>
+                <button class="btn btn-primary" type="submit">Complete</button>
             </form>
         </div>
     }
