@@ -12,13 +12,13 @@
 <div class="text-center">
     <h1 class="display-4">Service Station</h1>
 
-    <form method="post" action="/Home/GetToken">
+    <form asp-controller="Home" asp-action="GetToken" method="post">
         @Html.AntiForgeryToken()
 
         <button class="btn btn-primary" type="submit">Get Token</button>
     </form>
 
-    <form method="post" action="/Home/ServeNext">
+    <form asp-controller="Home" asp-action="ServeNext" method="post">
         @Html.AntiForgeryToken()
         
         <button class="btn btn-primary" type="submit">Serve Next</button>
@@ -31,7 +31,7 @@
         <div>
             <span class="display-6">Token: @token.TokenNumber</span>
 
-            <form method="post" action="/Home/CompleteCurrent" style="display: inline;">
+            <form asp-controller="Home" asp-action="CompleteCurrent" method="post" style="display: inline;">
                 @Html.AntiForgeryToken()
 
                 <input type="hidden" name="id" value="@token.Id" />
