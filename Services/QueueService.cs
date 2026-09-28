@@ -34,7 +34,7 @@ namespace CustomHome.Services
                         CreatedAt = DateTime.Now
                     };
 
-                    _context.ServiceTokens.Add(token); // donot need await as it is C# internal operation, not a mysql operation
+                    _context.ServiceTokens.Add(token); // do not need await as it is C# internal operation, not a mysql operation
                     await _context.SaveChangesAsync();
 
                     response.Result = QueueOperationResult.Success;
@@ -42,7 +42,7 @@ namespace CustomHome.Services
                 }
             });
 
-            return response;;
+            return response;
         }
 
         public async Task<QueueOperationResult> ServeNext()
@@ -68,7 +68,7 @@ namespace CustomHome.Services
 
                 if (token != null)
                 {
-                    token.Status = ServiceTokenStatus.Serving; // donot need await as it is C# internal operation, not a mysql operation
+                    token.Status = ServiceTokenStatus.Serving;
                     await _context.SaveChangesAsync();
 
                     result = QueueOperationResult.Success;
@@ -105,6 +105,7 @@ namespace CustomHome.Services
         {
             return await _context.ServiceTokens
                 .Where(t => t.Status == ServiceTokenStatus.Waiting)
+                .AsNoTracking() // no need to track the entities for read-only operations
                 .OrderBy(t => t.CreatedAt)
                 .ThenBy(t => t.Id) // if two tokens have the same CreatedAt timestamp, order by Id to ensure consistent behavior
                 .ToListAsync();
@@ -114,6 +115,7 @@ namespace CustomHome.Services
         {
             return await _context.ServiceTokens
                 .Where(t => t.Status == ServiceTokenStatus.Serving)
+                .AsNoTracking() // no need to track the entities for read-only operations
                 .OrderBy(t => t.CreatedAt)
                 .ThenBy(t => t.Id) // if two tokens have the same CreatedAt timestamp, order by Id to ensure consistent behavior
                 .ToListAsync();
@@ -136,7 +138,7 @@ namespace CustomHome.Services
         private async Task ExecuteWithQueueLockAsync(
             Func<QueueSettings, Task> action)
         {
-            await using var transaction =
+            await using var transaction =   // await using -> when the transaction leaves its scope, clean it up asynchronously
                 await _context.Database.BeginTransactionAsync();
 
             try
