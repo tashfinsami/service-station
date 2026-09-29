@@ -24,6 +24,14 @@ namespace CustomHome.Data
                 .HasIndex(t => t.TokenNumber)
                 .IsUnique();
 
+            modelBuilder.Entity<ServiceToken>() // create a composite index on Status, CreatedAt and Id for efficient querying
+                .HasIndex(t => new
+                {
+                    t.Status,
+                    t.CreatedAt,
+                    t.Id
+                });
+
             modelBuilder.Entity<QueueSettings>().HasData(
                 new QueueSettings
                 {
