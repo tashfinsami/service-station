@@ -39,5 +39,12 @@ CREATE UNIQUE INDEX `IX_ServiceTokens_TokenNumber` ON `ServiceTokens` (`TokenNum
 INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`)
 VALUES ('20260923082852_MakeTokenNumberUnique', '9.0.20');
 
+ALTER TABLE `ServiceTokens` MODIFY COLUMN `Status` varchar(255) CHARACTER SET utf8mb4 NOT NULL;
+
+CREATE INDEX `IX_ServiceTokens_Status_CreatedAt_Id` ON `ServiceTokens` (`Status`, `CreatedAt`, `Id`);
+
+INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`)
+VALUES ('20260929160825_AddServiceTokenQueueIndex', '9.0.20');
+
 COMMIT;
 
