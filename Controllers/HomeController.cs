@@ -30,9 +30,10 @@ public class HomeController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> GetToken()
+    public async Task<IActionResult> GetToken(
+        CancellationToken cancellationToken)
     {
-        var response = await _queueService.GetToken();
+        var response = await _queueService.GetToken(cancellationToken);
 
         if (response.Result == QueueOperationResult.Success)
         {
@@ -48,9 +49,10 @@ public class HomeController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> ServeNext()
+    public async Task<IActionResult> ServeNext(
+        CancellationToken cancellationToken)
     {
-        var result = await _queueService.ServeNext();
+        var result = await _queueService.ServeNext(cancellationToken);
 
         if (result == QueueOperationResult.Success)
         {
@@ -70,9 +72,11 @@ public class HomeController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> CompleteCurrent(int id)
+    public async Task<IActionResult> CompleteCurrent(
+        int id, 
+        CancellationToken cancellationToken)
     {
-        var result = await _queueService.Complete(id);
+        var result = await _queueService.Complete(id, cancellationToken);
 
         if (result == QueueOperationResult.Success)
         {
